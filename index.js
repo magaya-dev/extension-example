@@ -15,8 +15,8 @@ program.version(packageJson.version)
     .option('-p, --port <n>', 'running port', parseInt)
     .option('-r, --root <value>', 'startup root for api')
     .option('-s, --service-name <value>', 'name for service')
-    .option('-g', 'global flag')
-    .option('--network-id <value>', 'network id for database')
+    .option('-g, --gateway', 'dictates if we should be through gateway')
+    .option('-i, --network-id <n>', 'magaya network id', parseInt)
     .option('--connection-string <value>', 'connection endpoint for database')
     .parse(process.argv);
 
