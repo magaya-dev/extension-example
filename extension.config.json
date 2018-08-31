@@ -1,0 +1,38 @@
+{
+    "id": {
+        "company": "magaya",
+        "name": "example"
+    },
+    "version": "0.0.1",
+    "minimumMagayaVersion": "11.0.2",
+    "type": "httpServer",
+    "license": {},
+    "install": {
+        "engine": "node",
+        "manager": "npm",
+        "name": "@magaya/extension-example"
+    },
+    "launch": {
+        "engine": "pm2",
+        "cluster": true,
+        "main": "./index.js"
+    },
+    "interface": {
+        "title": "Example Extension",
+        "sections": {
+            "warehouseReceipt": {
+                "menuEntries": [
+                    {
+                        "category": "Actions",
+                        "title": "Items of a WHR",
+                        "selection": "single",
+                        "type": "url",
+                        "method": "GET",
+                        "path": "/server/whr/2/items",
+                        "pathType": "cs-relative"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@magaya/extension-example",
+  "version": "0.0.1",
+  "description": "Basic example of a Magaya extension",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "npm link @magaya/hyperion-express-middleware",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Magaya",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.17.1",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "@magaya/hyperion-express-middleware": "^0.2.2",
+    "@magaya/hyperion-node": "^11.2.0"
+  }
+}
