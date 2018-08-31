@@ -10,3 +10,18 @@ To debug the code we recommend [Visual Studio Code](https://code.visualstudio.co
 
 ## How to run
 
+Clone or download the repository. Navigate to the directory and install the dependencies.
+
+```
+$ npm install
+```
+
+Open Visual Studio code in the directory
+
+```
+$ code .
+```
+
+Modify the *launch.json* file to connect to your [Magaya](http://www.magaya.com) database and run (F5).
+
+Navigate to http://localhost:8000/server/test
