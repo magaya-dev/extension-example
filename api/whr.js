@@ -1,12 +1,12 @@
 
 module.exports = {
-    getWhrItemCount : async (number, dbx, algorithm) => {
-        const list = dbx.Warehousing.WarehouseReceipt.ListByNumber;
+    getWhrItemCount : async (whrGuid, dbx, algorithm) => {
+        const list = dbx.Warehousing.WarehouseReceipt.ListByGuid;
 
         // find the desired item asynchronously
         const found = await algorithm.find(dbx.using(list))
             .where(function (whr) {
-                return whr.Number === number;
+                return whr.GUID === whrGuid;
             });
 
         // once the search is complete, return the proper result

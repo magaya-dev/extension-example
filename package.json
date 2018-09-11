@@ -13,8 +13,5 @@
     "commander": "^2.17.1",
     "express": "^4.16.3"
   },
-  "devDependencies": {
-    "@magaya/hyperion-express-middleware": "^0.2.2",
-    "@magaya/hyperion-node": "^11.2.0"
-  }
+  "devDependencies": {}
 }

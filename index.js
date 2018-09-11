@@ -3,7 +3,7 @@ const program = require('commander');
 const packageJson = require('./package.json');
 // require the hyperion middleware, pass the required arguments to connect to the database
 // the second parameter is optional, if you specify it it will include specialized APIs like the one for LiveTrack Mobile (ltm)
-const hyperion = require('@magaya/hyperion-express-middleware')(process.argv,'');
+const hyperion = require('@magaya/hyperion-express-middleware').middleware(process.argv,'');
 // require the express framework and create an instance of it
 const app = require('express')();
 // helper for paths
@@ -40,9 +40,9 @@ app.get(`${program.root}/test`, (request, response) => {
     response.send('Success!!');
 });
 
-app.get(`${program.root}/whr/:number/items`, async (request, response) => {
+app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
     // invoke an asynchronous method and wait for it's return value
-    const count = await whr.getWhrItemCount(request.params.number, request.dbx, request.algorithm);
+    const count = await whr.getWhrItemCount(request.params.guid, request.dbx, request.algorithm);
     // send the response to the browser
     response.json({
         whrs : count

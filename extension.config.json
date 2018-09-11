@@ -28,7 +28,7 @@
                         "selection": "single",
                         "type": "url",
                         "method": "GET",
-                        "path": "/server/whr/2/items",
+                        "path": "/whr/{operation-guid}/items",
                         "pathType": "cs-relative"
                     }
                 ]
