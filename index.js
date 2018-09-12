@@ -42,7 +42,8 @@ setup.createCustomFieldDefinitions(hyperion);
 // apply the middleware in the application
 app.use(middleware);
 
-app.use(`${program.root}/static`, express.static(path.join(__dirname, 'static')));
+// serve the static content under the root path
+app.use(`${program.root}/`, express.static(path.join(__dirname, 'static')));
 
 // define a route that can be consumed from a web browser
 app.get(`${program.root}/test`, (request, response) => {
