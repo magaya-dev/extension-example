@@ -7,7 +7,8 @@ const hyperionMiddleware = require('@magaya/hyperion-express-middleware');
 // the second parameter is optional, if you specify it it will include specialized APIs like the one for LiveTrack Mobile (ltm)
 const middleware = hyperionMiddleware.middleware(process.argv,'');
 // require the express framework and create an instance of it
-const app = require('express')();
+const express = require('express');
+const app = express();
 // helper for paths
 const path = require('path');
 // require our setup helper functions
@@ -40,6 +41,8 @@ setup.createCustomFieldDefinitions(hyperion);
 
 // apply the middleware in the application
 app.use(middleware);
+
+app.use(`${program.root}/static`, express.static(path.join(__dirname, 'static')));
 
 // define a route that can be consumed from a web browser
 app.get(`${program.root}/test`, (request, response) => {
