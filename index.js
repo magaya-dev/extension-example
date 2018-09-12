@@ -1,13 +1,17 @@
 // helper package for parsing command arguments
 const program = require('commander');
 const packageJson = require('./package.json');
-// require the hyperion middleware, pass the required arguments to connect to the database
+// require the hyperion middleware
+const hyperionMiddleware = require('@magaya/hyperion-express-middleware');
+// create the hyperion middleware for express.js, pass the required arguments to connect to the database
 // the second parameter is optional, if you specify it it will include specialized APIs like the one for LiveTrack Mobile (ltm)
-const hyperion = require('@magaya/hyperion-express-middleware').middleware(process.argv,'');
+const middleware = hyperionMiddleware.middleware(process.argv,'');
 // require the express framework and create an instance of it
 const app = require('express')();
 // helper for paths
 const path = require('path');
+// require our setup helper functions
+const setup = require(path.join(__dirname, 'api/setup'));
 // require our Warehouse Receipts API
 const whr = require(path.join(__dirname, 'api/whr'));
 
@@ -28,8 +32,14 @@ if (!program.port) {
     process.exit(1);
 }
 
+// create an instance of hyperion (no middleware) with the same connection to the database
+const hyperion = hyperionMiddleware.hyperion(process.argv,'');
+
+// setup the extension with required data, notice this occurs at the application startup, not thru a web request
+setup.createCustomFieldDefinitions(hyperion);
+
 // apply the middleware in the application
-app.use(hyperion);
+app.use(middleware);
 
 // define a route that can be consumed from a web browser
 app.get(`${program.root}/test`, (request, response) => {
