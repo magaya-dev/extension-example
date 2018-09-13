@@ -11,6 +11,8 @@ const express = require('express');
 const app = express();
 // helper for paths
 const path = require('path');
+// helper package to get the body of requests
+const bodyParser = require("body-parser");
 // require our setup helper functions
 const setup = require(path.join(__dirname, 'api/setup'));
 // require our Warehouse Receipts API
@@ -41,6 +43,9 @@ setup.createCustomFieldDefinitions(hyperion);
 
 // apply the middleware in the application
 app.use(middleware);
+// applye other hepler middlewares
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // serve the static content under the root path
 app.use(`${program.root}/`, express.static(path.join(__dirname, 'static')));
@@ -52,6 +57,18 @@ app.get(`${program.root}/test`, (request, response) => {
     const api = request.api;                // api functions
  
     response.send('Success!!');
+});
+
+app.get(`${program.root}/whr/:guid`, async (request, response) => {
+    const result = await whr.getWhr(request.params.guid, request.dbx, request.algorithm);
+    // send the response to the browser
+    response.json(result);
+});
+
+app.post(`${program.root}/whr/:guid/customfields`, async (request, response) => {
+    const result = await whr.saveCustomFields(request.params.guid, request.body, request.dbx, request.algorithm);
+    // send the response to the browser
+    response.json(result);
 });
 
 app.get(`${program.root}/whr/:guid/items`, async (request, response) => {

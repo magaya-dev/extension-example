@@ -30,6 +30,15 @@
                         "method": "GET",
                         "path": "/whr/{operation-guid}/items",
                         "pathType": "cs-relative"
+                    },
+                    {
+                        "category": "Actions",
+                        "title": "Set Custom Field Value",
+                        "selection": "single",
+                        "type": "url",
+                        "method": "GET",
+                        "path": "/custom_field.html?whr={operation-guid}",
+                        "pathType": "cs-relative"
                     }
                 ]
             }
