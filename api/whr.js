@@ -61,11 +61,21 @@ module.exports = {
         // set the value of the Custom Field
         editWhr.CustomFields['test_from_api'] = data.customField;
 
-        // save the modified Warehouse Receipt to the database
-        await dbx.save(editWhr);
+        try {
+            // save the modified Warehouse Receipt to the database
+            await dbx.save(editWhr);
 
-        return {
-            success: true
-        };
+            // if everything went OK, then return success
+            return {
+                success: true
+            };
+        }
+        catch (error) {
+            // if an unexpected error ocurred, return failure
+            return {
+                error,
+                success : false
+            };
+        }
     }
 };
