@@ -45,7 +45,7 @@ module.exports = {
         return transformWhr(whr);
     },
 
-    saveCustomFields : async function(whrGuid, data, dbx, algorithm) {
+    saveCustomFields : async function(whrGuid, data, dbx, dbw, algorithm) {
         // find the Warehouse Receipt by GUID
         let whr = await this.findWhr(whrGuid, dbx, algorithm);
 
@@ -57,13 +57,13 @@ module.exports = {
         }
 
         // mark the Warehouse Receipt for edition
-        let editWhr = await dbx.edit(whr);
+        let editWhr = await dbw.edit(whr);
         // set the value of the Custom Field
         editWhr.CustomFields['test_from_api'] = data.customField;
 
         try {
             // save the modified Warehouse Receipt to the database
-            await dbx.save(editWhr);
+            await dbw.save(editWhr);
 
             // if everything went OK, then return success
             return {

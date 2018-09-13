@@ -66,7 +66,7 @@ app.get(`${program.root}/whr/:guid`, async (request, response) => {
 });
 
 app.post(`${program.root}/whr/:guid/customfields`, async (request, response) => {
-    const result = await whr.saveCustomFields(request.params.guid, request.body, request.dbx, request.algorithm);
+    const result = await whr.saveCustomFields(request.params.guid, request.body, request.dbx, request.dbw, request.algorithm);
     // send the response to the browser
     response.json(result);
 });
