@@ -35,6 +35,21 @@ if (!program.port) {
     process.exit(1);
 }
 
+const spawn = require('child_process').spawn;
+const childProcess = spawn('node', ['./api/job.js'].concat(process.argv));
+
+childProcess.on('exit', function(){
+  console.log('Background process exited.');
+});
+// get notified when the background process outputs something
+childProcess.stdout.on('data', function (data) {
+  console.log('stdout: ' + data);
+});
+// get notified when there is an error in the background process
+childProcess.stderr.on('data', function (data) {
+  console.log('stderr: ' + data);
+});
+
 // create an instance of hyperion (no middleware) with the same connection to the database
 const hyperion = hyperionMiddleware.hyperion(process.argv,'');
 
@@ -78,6 +93,12 @@ app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
     response.json({
         whrs : count
     });
+});
+
+// create an endpoint to stop the background process
+app.get(`${program.root}/stop-process`, async function (request, response) {
+    childProcess.kill();
+    response.json({success: true});
 });
 
 // start your application in the port specified
