@@ -17,6 +17,8 @@ const bodyParser = require("body-parser");
 const setup = require(path.join(__dirname, 'api/setup'));
 // require our Warehouse Receipts API
 const whr = require(path.join(__dirname, 'api/whr'));
+// require our Configuration API
+const configJob = require(path.join(__dirname, 'api/config-job'));
 
 program.version(packageJson.version)
     .option('-p, --port <n>', 'running port', parseInt)
@@ -93,6 +95,11 @@ app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
     response.json({
         whrs : count
     });
+});
+
+app.get(`${program.root}/config-process`, async (request, response) => {
+    const config = await configJob.getConfig();
+    response.json(config);
 });
 
 // create an endpoint to stop the background process
