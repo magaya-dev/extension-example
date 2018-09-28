@@ -22,6 +22,9 @@ async function setupCustomFieldDefinitions(hyperion, objectType, definitionsList
         newCustomFieldDef.DisplayName = element.name;
         // can only be written from API
         newCustomFieldDef.IsReadOnly = true;
+        if (element.defaultValue) {
+            newCustomFieldDef.DefaultValue = element.defaultValue;
+        }
         
         // Call this method to persist the object in the database, otherwise it won't be saved
         hyperion.dbx.save(newCustomFieldDef); 
@@ -47,12 +50,14 @@ async function setupInvoices(hyperion) {
         {
             internalName : 'ready_to_transmit',
             name : 'Ready to Transmit',
-            type : hyperion.dbx.CustomField.Definition.DataType.Boolean
+            type : hyperion.dbx.CustomField.Definition.DataType.Boolean,
+            defaultValue : false
         },
         {
             internalName : 'transmitted',
             name : 'Transmitted',
-            type : hyperion.dbx.CustomField.Definition.DataType.Boolean
+            type : hyperion.dbx.CustomField.Definition.DataType.Boolean,
+            defaultValue : false
         },
         {
             internalName : 'last_process_date',
