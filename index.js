@@ -19,6 +19,8 @@ const setup = require(path.join(__dirname, 'api/setup'));
 const whr = require(path.join(__dirname, 'api/whr'));
 // require our Configuration API
 const configJob = require(path.join(__dirname, 'api/config-job'));
+// require our FTP API
+const ftp = require(path.join(__dirname, 'api/ftp'));
 
 program.version(packageJson.version)
     .option('-p, --port <n>', 'running port', parseInt)
@@ -97,6 +99,7 @@ app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
     });
 });
 
+// get the current background job configuration
 app.get(`${program.root}/config-process`, async (request, response) => {
     const config = await configJob.getConfig();
     response.json(config);
@@ -106,6 +109,11 @@ app.get(`${program.root}/config-process`, async (request, response) => {
 app.get(`${program.root}/stop-process`, async function (request, response) {
     childProcess.kill();
     response.json({success: true});
+});
+
+// test FTP connection
+app.get(`${program.root}/test-ftp`, async function (request, response) {
+    ftp.testConnection(response);
 });
 
 // start your application in the port specified
