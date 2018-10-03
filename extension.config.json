@@ -20,6 +20,18 @@
     "interface": {
         "title": "Example Extension",
         "sections": {
+            "config" : {
+                "menuEntries": [{
+					"category": "Config",
+					"title": "Background process",
+					"selection": "single",
+					"type": "url",
+					"method": "GET",
+					"path": "/config-job.html",
+					"pathType": "cs-relative",
+					"launch": "internal"
+				}]
+            },
             "warehouseReceipt": {
                 "menuEntries": [
                     {

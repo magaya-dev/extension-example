@@ -20,5 +20,9 @@ async function getScheduleConfig() {
 module.exports = {
     getConfig : async function () {
         return await getScheduleConfig();
+    },
+
+    saveConfig : function(configPath, json){        
+        fs.writeFileSync(configPath, JSON.stringify(json), 'utf8');
     }
 }

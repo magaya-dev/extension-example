@@ -105,6 +105,14 @@ app.get(`${program.root}/config-process`, async (request, response) => {
     response.json(config);
 });
 
+// save the background job configuration
+app.post(`${program.root}/config-process`, function (request, response) {
+    const configPath = path.join(__dirname, 'config.json');
+
+    configJob.saveConfig(configPath, request.body);
+    response.json({result: 'OK'});
+});
+
 // create an endpoint to stop the background process
 app.get(`${program.root}/stop-process`, async function (request, response) {
     childProcess.kill();
