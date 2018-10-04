@@ -45,6 +45,53 @@ module.exports = {
         return transformWhr(whr);
     },
 
+    getWhrAttachments : async function(whrGuid, dbx, algorithm) {
+        let whr = await this.findWhr(whrGuid, dbx, algorithm);
+
+        // once the search is complete, return the proper result
+        let result = transformWhr(whr);
+        let attachments = [];
+        // if there are attachments, iterate thru all of them
+        if (whr.Attachments) {
+            await algorithm.forEach(dbx.using(whr.Attachments)).callback(att => {
+                attachments.push({
+                    id : att.id,
+                    name : att.Name,
+                    extension : att.Extension,
+                    isImage : (att.IsOtherDocument === 0)
+                });
+            });
+        }
+        result.Attachments = attachments;
+
+        return result;
+    },
+
+    getWhrAttachment: async function(whrGuid, attachmentId, dbx, algorithm, response) {
+        const startTime = new Date();
+        let whr = await this.findWhr(whrGuid, dbx, algorithm);
+        if (!whr.Attachments) {
+            response.end();
+            return;
+        }
+
+        // find the correct attachment by ID
+        let attachment = await algorithm.find(dbx.using(whr.Attachments)).where(current => {
+            return current.id === attachmentId;
+        });
+
+        if (!attachment){
+            response.end();
+            return;
+        }
+
+        // send the time it took to retrieve the attachment
+        const endTime = new Date();
+        response.setHeader('X-Response-Time', endTime.getTime()-startTime.getTime());
+        // stream the attachment content back to the caller
+        algorithm.streamAttachmentContent(attachment, response).then(_ => response.end());
+    },
+
     saveCustomFields : async function(whrGuid, data, dbx, dbw, algorithm) {
         // find the Warehouse Receipt by GUID
         let whr = await this.findWhr(whrGuid, dbx, algorithm);

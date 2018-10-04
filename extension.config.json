@@ -51,6 +51,15 @@
                         "method": "GET",
                         "path": "/custom_field.html?whr={operation-guid}",
                         "pathType": "cs-relative"
+                    },
+                    {
+                        "category": "Actions",
+                        "title": "See attachments",
+                        "selection": "single",
+                        "type": "url",
+                        "method": "GET",
+                        "path": "/attachments.html?whr={operation-guid}",
+                        "pathType": "cs-relative"
                     }
                 ]
             }

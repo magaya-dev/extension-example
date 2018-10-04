@@ -99,6 +99,16 @@ app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
     });
 });
 
+app.get(`${program.root}/whr/:guid/attachments`, async (request, response) => {
+    const result = await whr.getWhrAttachments(request.params.guid, request.dbx, request.algorithm);
+    // send the response to the browser
+    response.json(result);
+});
+
+app.get(`${program.root}/whr/:guid/attachment/:id`, async (request, response) => {
+    whr.getWhrAttachment(request.params.guid, parseInt(request.params.id), request.dbx, request.algorithm, response);
+});
+
 // get the current background job configuration
 app.get(`${program.root}/config-process`, async (request, response) => {
     const config = await configJob.getConfig();
