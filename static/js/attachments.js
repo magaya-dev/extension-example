@@ -7,7 +7,7 @@ function displayAttachments(dataSection, whr) {
     }
     
     for (let attachment of whr.Attachments) {
-        let attachmentLink = `whr/${guid}/attachment/${attachment.id}`;;
+        let attachmentLink = `whr/${guid}/attachment/${attachment.id}`;
         if (attachment.isImage) {
             let img = document.createElement('img');
             img.src = attachmentLink;

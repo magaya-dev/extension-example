@@ -62,7 +62,7 @@ setup.createCustomFieldDefinitions(hyperion);
 
 // apply the middleware in the application
 app.use(middleware);
-// applye other hepler middlewares
+// apply other helper middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
