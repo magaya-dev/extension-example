@@ -17,6 +17,8 @@ const bodyParser = require("body-parser");
 const setup = require(path.join(__dirname, 'api/setup'));
 // require our Warehouse Receipts API
 const whr = require(path.join(__dirname, 'api/whr'));
+// require our Invoices API
+const invoice = require(path.join(__dirname, 'api/invoice'));
 // require our Configuration API
 const configJob = require(path.join(__dirname, 'api/config-job'));
 // require our FTP API
@@ -107,6 +109,11 @@ app.get(`${program.root}/whr/:guid/attachments`, async (request, response) => {
 
 app.get(`${program.root}/whr/:guid/attachment/:id`, async (request, response) => {
     whr.getWhrAttachment(request.params.guid, parseInt(request.params.id), request.dbx, request.algorithm, response);
+});
+
+app.get(`${program.root}/invoices`, async (request, response) => {
+    const results = await invoice.getList(request.dbx, request.algorithm, request.query.startDate, request.query.endDate);
+    response.json(results);
 });
 
 // get the current background job configuration

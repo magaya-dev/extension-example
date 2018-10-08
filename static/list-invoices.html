@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Invoices</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+    </head>
+    <body>
+        <div role="main" class="container-fluid">
+            <div class="row mt-2 justify-content-md-center">
+                <div id="filter-container" class="col-10 align-self-center">
+                <form class="form-inline">
+                    <label for="start-date" class="my-1 mr-2">Start date</label>
+                    <input type="date" name="start-date" id="start-date" class="form-control form-control-sm" />
+                    <label for="end-date" class="my-1 mr-2 ml-2">End date</label>
+                    <input type="date" name="end-date" id="end-date" class="form-control form-control-sm" />
+                    <button type="button" class="btn btn-primary ml-2" onclick="filter()">Filter</button>
+                </form>
+                </div>
+            </div>
+            <div id="loader-container" class="row mt-3 justify-content-md-center"></div>
+            <div class="row mt-3 justify-content-md-center">
+                <div id="data-container" class="col-10 align-self-center">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Applied To</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="js/utils.js"></script>
+        <script src="js/invoices.js"></script>
+    </body>
+</html>

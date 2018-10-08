@@ -62,7 +62,18 @@
                         "pathType": "cs-relative"
                     }
                 ]
-            }
+            },
+			"invoice": {
+				"menuEntries": [{
+					"category": "Actions",
+					"title": "List invoices",
+					"selection": "none",
+					"type": "url",
+					"method": "GET",
+					"path": "/list-invoices.html",
+					"pathType": "cs-relative"
+				}]
+			}
         }
     }
 }

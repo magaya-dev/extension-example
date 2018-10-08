@@ -19,7 +19,7 @@ async function doWork() {
 
     const startDate = new Date(2018, 7, 1);
     const lastRecords = 10;
-    const invoices = await hyperion.algorithm.select(hyperion.dbx.using(list).from(startDate), lastRecords).where(current => true).project(invoice => invoice);
+    const invoices = await hyperion.algorithm.select(hyperion.dbx.using(list).from(startDate), lastRecords).where(current => current.DbClassType === 6).project(invoice => invoice);
     
     if (!invoices)
         return;
