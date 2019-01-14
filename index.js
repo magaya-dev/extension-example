@@ -19,6 +19,8 @@ const setup = require(path.join(__dirname, 'api/setup'));
 const whr = require(path.join(__dirname, 'api/whr'));
 // require our Invoices API
 const invoice = require(path.join(__dirname, 'api/invoice'));
+// require our Company API
+const company = require(path.join(__dirname, 'api/company'));
 // require our Configuration API
 const configJob = require(path.join(__dirname, 'api/config-job'));
 // require our FTP API
@@ -114,6 +116,10 @@ app.get(`${program.root}/whr/:guid/attachment/:id`, async (request, response) =>
 app.get(`${program.root}/invoices`, async (request, response) => {
     const results = await invoice.getList(request.dbx, request.algorithm, request.query.startDate, request.query.endDate);
     response.json(results);
+});
+
+app.get(`${program.root}/company-info`, async (request, response) => {
+    response.json(await company.getCompanyInfo(request.dbx));
 });
 
 // get the current background job configuration

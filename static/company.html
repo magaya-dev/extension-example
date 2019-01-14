@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Company Info</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-4 align-self-center text-center">
+            &nbsp;
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4 align-self-center text-center">
+            <img id="configLoader" class="align-self-center" src="./images/loading.gif" />
+        </div>
+    </div>
+    <div id="info-holder" class="row justify-content-center d-none">
+        <div class="col-6 align-self-center text-center">
+            <p id="company-name">Name</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div id="logo-holder" class="col-6 align-self-center text-center d-none">
+            <img id="company-logo" src="" alt="Logo" style="width: 200px;">
+        </div>
+    </div>
+    
+    <script src="./js/utils.js"></script>
+    <script src="./js/company-info.js"></script>
+    <script>
+        loadCompanyInfo();
+    </script>
+</body>
+</html>
