@@ -10,6 +10,7 @@
   "author": "Magaya",
   "license": "ISC",
   "dependencies": {
+    "@magaya/extension-fs-helper": "0.0.3",
     "body-parser": "^1.18.3",
     "commander": "^2.17.1",
     "express": "^4.16.3",

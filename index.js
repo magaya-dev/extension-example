@@ -1,6 +1,8 @@
 // helper package for parsing command arguments
 const program = require('commander');
 const packageJson = require('./package.json');
+// require the config helper
+const fsHelper = require('@magaya/extension-fs-helper');
 // require the hyperion middleware
 const hyperionMiddleware = require('@magaya/hyperion-express-middleware');
 // create the hyperion middleware for express.js, pass the required arguments to connect to the database
@@ -11,6 +13,8 @@ const express = require('express');
 const app = express();
 // helper for paths
 const path = require('path');
+// helper for filesystem
+const fs = require('fs');
 // helper package to get the body of requests
 const bodyParser = require("body-parser");
 // require our setup helper functions
@@ -42,6 +46,21 @@ if (!program.port) {
     console.log('Must submit root...');
     process.exit(1);
 }
+
+// retrieve the config folder for this instance of the extension
+const configFolder = fsHelper.GetExtensionDataFolder({
+    "company": "magaya",
+    "name": "example"
+}, program.networkId);
+
+const configFile = path.join(configFolder, 'config.json');
+// save a configuration file in the proper folder
+const configJson = {
+    "value" : 123
+};
+// write the configuration to the filesystem
+fs.writeFileSync(configFile, JSON.stringify(configJson), 'utf8');
+
 
 const spawn = require('child_process').spawn;
 const childProcess = spawn('node', ['./api/job.js'].concat(process.argv));

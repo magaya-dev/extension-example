@@ -10,7 +10,7 @@
             "name": "Launch Program",
             "program": "${workspaceFolder}\\index.js",
             "args": [
-                "--root", "/server","--port", "8000", "--service-name", "Magaya_CS_Default", "--connection-string=mc-mia-dev-04:6110"
+                "--root", "/server","--port", "8000", "--service-name", "Magaya_CS_Default", "--network-id", "29870", "--connection-string=mc-mia-dev-04:6110"
             ]
         }
     ]
