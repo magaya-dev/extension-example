@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Save Attachment</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+    </head>
+    <body>
+        <div role="main" class="h-100 container-fluid">
+            <div id="info-container" class="row justify-content-center">
+            </div>
+            <div class="row mt-5 justify-content-center">
+                <div id="data-container" class="col-4 align-self-center">
+                </div>
+            </div>
+            <div class="row mt-5 justify-content-center">
+                <div id="form-container" class="col-4 align-self-center">
+                    <form id="attachment-form" action="./saveAttachment" method="post" enctype="multipart/form-data">
+                        <input type="file" name="attachment" id="attachment" />
+                        <button type="save" id="btn-submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="js/utils.js"></script>
+        <script src="js/upload-attachments.js"></script>
+    </body>
+</html>

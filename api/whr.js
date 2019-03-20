@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 function transformWhr(whr) {
     if (!whr)
         return {};
@@ -65,6 +68,55 @@ module.exports = {
         result.Attachments = attachments;
 
         return result;
+    },
+
+    saveWhrAttachment : async function(whrGuid, request, file) {
+        if (!file)
+            return { success : false, error : 'Invalid file'};
+
+        let filename = file.path;
+        if (!fs.existsSync(filename))
+            return { success : false, error : 'Invalid file'};
+
+        let newFilename = path.join(file.destination, file.originalname);
+        fs.renameSync(filename, newFilename);
+
+        const dbx = request.dbx;                // hyperion namespaces
+        const algorithm = request.algorithm;    // hyperion algorithms
+        const dbw = request.dbw;                // hyperion write access
+
+        const whrList = dbx.Warehousing.WarehouseReceipt.ListByGuid;
+
+        const whr = await algorithm.find(dbx.using(whrList).from(whrGuid)).where(i => {
+            return true;
+        });
+
+        if (!whr) {
+            // remove file
+            await fs.unlink(newFilename);
+            
+            return { success : false, error : 'Warehouse Receipt does not exist'};
+        }
+
+        try {
+            let edited = dbx.edit(whr);
+
+            let att = new request.dbx.DbClass.Attachment(newFilename);
+            dbx.insert(edited.Attachments, att);
+
+            await dbw.save(edited);
+
+            // remove file
+            await fs.unlink(newFilename);
+        }
+        catch (ex) {
+            // remove file
+            await fs.unlink(newFilename);
+
+            return { success : false, error : 'Unexpected error'};
+        }
+
+        return { success : true };
     },
 
     getWhrAttachment: async function(whrGuid, attachmentId, dbx, algorithm, response) {

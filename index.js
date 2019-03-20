@@ -7,7 +7,7 @@ const fsHelper = require('@magaya/extension-fs-helper');
 const hyperionMiddleware = require('@magaya/hyperion-express-middleware');
 // create the hyperion middleware for express.js, pass the required arguments to connect to the database
 // the second parameter is optional, if you specify it it will include specialized APIs like the one for LiveTrack Mobile (ltm)
-const middleware = hyperionMiddleware.middleware(process.argv,'');
+const middleware = hyperionMiddleware.middleware(process.argv,'magaya-example');
 // require the express framework and create an instance of it
 const express = require('express');
 const app = express();
@@ -29,6 +29,10 @@ const company = require(path.join(__dirname, 'api/company'));
 const configJob = require(path.join(__dirname, 'api/config-job'));
 // require our FTP API
 const ftp = require(path.join(__dirname, 'api/ftp'));
+// requite helper package to deal with files sent from the client
+const multer  = require('multer');
+const uploadsFolder = path.join(__dirname, 'uploads');
+const upload = multer({ dest: uploadsFolder });
 
 program.version(packageJson.version)
     .option('-p, --port <n>', 'running port', parseInt)
@@ -78,7 +82,7 @@ childProcess.stderr.on('data', function (data) {
 });
 
 // create an instance of hyperion (no middleware) with the same connection to the database
-const hyperion = hyperionMiddleware.hyperion(process.argv,'');
+const hyperion = hyperionMiddleware.hyperion(process.argv,'magaya-example');
 
 // setup the extension with required data, notice this occurs at the application startup, not thru a web request
 setup.createCustomFieldDefinitions(hyperion);
@@ -93,11 +97,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(`${program.root}/`, express.static(path.join(__dirname, 'static')));
 
 // define a route that can be consumed from a web browser
-app.get(`${program.root}/test`, (request, response) => {
+app.get(`${program.root}/test`, async (request, response) => {
     const dbx = request.dbx;                // hyperion namespaces
     const algorithm = request.algorithm;    // hyperion algorithms
     const api = request.api;                // api functions
- 
+
     response.send('Success!!');
 });
 
@@ -107,7 +111,7 @@ app.get(`${program.root}/whr/:guid`, async (request, response) => {
     response.json(result);
 });
 
-app.post(`${program.root}/whr/:guid/customfields`, async (request, response) => {
+app.post(`${program.root}/whr/:guid/customfields`, upload.none(), async (request, response) => {
     const result = await whr.saveCustomFields(request.params.guid, request.body, request.dbx, request.dbw, request.algorithm);
     // send the response to the browser
     response.json(result);
@@ -124,6 +128,12 @@ app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
 
 app.get(`${program.root}/whr/:guid/attachments`, async (request, response) => {
     const result = await whr.getWhrAttachments(request.params.guid, request.dbx, request.algorithm);
+    // send the response to the browser
+    response.json(result);
+});
+
+app.post(`${program.root}/whr/:guid/attachments`, upload.single('attachment'), async (request, response) => {
+    const result = await whr.saveWhrAttachment(request.params.guid, request, request.file);
     // send the response to the browser
     response.json(result);
 });
@@ -148,7 +158,7 @@ app.get(`${program.root}/config-process`, async (request, response) => {
 });
 
 // save the background job configuration
-app.post(`${program.root}/config-process`, function (request, response) {
+app.post(`${program.root}/config-process`, upload.none(), function (request, response) {
     const configPath = path.join(__dirname, 'config.json');
 
     configJob.saveConfig(configPath, request.body);
