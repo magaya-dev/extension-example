@@ -1,6 +1,6 @@
 
 const path = require('path');
-const hyperion = require('@magaya/hyperion-express-middleware').hyperion(process.argv, '');
+const hyperion = require('@magaya/hyperion-express-middleware').hyperion(process.argv, 'example');
 const configJob = require(path.join(__dirname, './config-job'));
 
 function getFrequencyFactor(frequency) {
