@@ -6,8 +6,13 @@ const fsHelper = require('@magaya/extension-fs-helper');
 // require the hyperion middleware
 const hyperionMiddleware = require('@magaya/hyperion-express-middleware');
 // create the hyperion middleware for express.js, pass the required arguments to connect to the database
-// the second parameter is optional, if you specify it it will include specialized APIs like the one for LiveTrack Mobile (ltm)
-const middleware = hyperionMiddleware.middleware(process.argv,'magaya-example');
+// the second parameter contains the unique identifier of the extension connecting to the database
+// it can also mean including specialized APIs like the one for LiveTrack Mobile (magaya-ltm)
+const apiKey = '<YOUR-API-KEY-HERE>';
+const middleware = hyperionMiddleware.middleware(process.argv, {
+    'clientId' : 'magaya-example',
+    'apiKey' : apiKey
+});
 // require the express framework and create an instance of it
 const express = require('express');
 const app = express();
