@@ -25,6 +25,10 @@ async function setupCustomFieldDefinitions(hyperion, objectType, definitionsList
         if (element.defaultValue) {
             newCustomFieldDef.DefaultValue = element.defaultValue;
         }
+
+        if (newCustomFieldDef.Type === hyperion.dbx.CustomField.Definition.DataType.DateTime) {
+            newCustomFieldDef.IncludesTime = true;
+        }
         
         // Call this method to persist the object in the database, otherwise it won't be saved
         hyperion.dbx.save(newCustomFieldDef); 
