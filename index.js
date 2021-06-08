@@ -69,7 +69,6 @@ const configJson = {
 // write the configuration to the filesystem
 fs.writeFileSync(configFile, JSON.stringify(configJson), 'utf8');
 
-
 const spawn = require('child_process').spawn;
 const childProcess = spawn('node', ['./api/job.js'].concat(process.argv));
 
@@ -87,6 +86,8 @@ childProcess.stderr.on('data', function (data) {
 
 // create an instance of hyperion (no middleware) with the same connection to the database
 const hyperion = hyperionMiddleware.hyperion(process.argv,'magaya-example');
+const { getWarehouseReceiptsAttachments } = require('./api/long-job')({hyperion, dataFolder: configFolder});
+getWarehouseReceiptsAttachments();
 
 // setup the extension with required data, notice this occurs at the application startup, not thru a web request
 setup.createCustomFieldDefinitions(hyperion);
