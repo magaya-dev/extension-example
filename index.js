@@ -1,5 +1,5 @@
 // helper package for parsing command arguments
-const program = require('commander');
+const { program } = require('commander');
 const packageJson = require('./package.json');
 // require the config helper
 const fsHelper = require('@magaya/extension-fs-helper');
@@ -20,8 +20,6 @@ const app = express();
 const path = require('path');
 // helper for filesystem
 const fs = require('fs');
-// helper package to get the body of requests
-const bodyParser = require("body-parser");
 // require our setup helper functions
 const setup = require(path.join(__dirname, 'api/setup'));
 // require our Warehouse Receipts API
@@ -48,10 +46,11 @@ program.version(packageJson.version)
     .option('--connection-string <value>', 'connection endpoint for database')
     .parse(process.argv);
 
-if (!program.port) {
+const options = program.opts();
+if (!options.port) {
     console.log('Must submit port on which to listen...');
     process.exit(1);
-} else if (!program.root) {
+} else if (!options.root) {
     console.log('Must submit root...');
     process.exit(1);
 }
@@ -60,7 +59,7 @@ if (!program.port) {
 const configFolder = fsHelper.GetExtensionDataFolder({
     "company": "magaya",
     "name": "example"
-}, program.networkId);
+}, options.networkId);
 
 const configFile = path.join(configFolder, 'config.json');
 // save a configuration file in the proper folder
@@ -95,14 +94,14 @@ setup.createCustomFieldDefinitions(hyperion);
 // apply the middleware in the application
 app.use(middleware);
 // apply other helper middlewares
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // serve the static content under the root path
-app.use(`${program.root}/`, express.static(path.join(__dirname, 'static')));
+app.use(`${options.root}/`, express.static(path.join(__dirname, 'static')));
 
 // define a route that can be consumed from a web browser
-app.get(`${program.root}/test`, async (request, response) => {
+app.get(`${options.root}/test`, async (request, response) => {
     const dbx = request.dbx;                // hyperion namespaces
     const algorithm = request.algorithm;    // hyperion algorithms
     const api = request.api;                // api functions
@@ -110,19 +109,19 @@ app.get(`${program.root}/test`, async (request, response) => {
     response.send('Success!!');
 });
 
-app.get(`${program.root}/whr/:guid`, async (request, response) => {
+app.get(`${options.root}/whr/:guid`, async (request, response) => {
     const result = await whr.getWhr(request.params.guid, request.dbx, request.algorithm);
     // send the response to the browser
     response.json(result);
 });
 
-app.post(`${program.root}/whr/:guid/customfields`, upload.none(), async (request, response) => {
+app.post(`${options.root}/whr/:guid/customfields`, upload.none(), async (request, response) => {
     const result = await whr.saveCustomFields(request.params.guid, request.body, request.dbx, request.dbw, request.algorithm);
     // send the response to the browser
     response.json(result);
 });
 
-app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
+app.get(`${options.root}/whr/:guid/items`, async (request, response) => {
     // invoke an asynchronous method and wait for it's return value
     const count = await whr.getWhrItemCount(request.params.guid, request.dbx, request.algorithm);
     // send the response to the browser
@@ -131,39 +130,39 @@ app.get(`${program.root}/whr/:guid/items`, async (request, response) => {
     });
 });
 
-app.get(`${program.root}/whr/:guid/attachments`, async (request, response) => {
+app.get(`${options.root}/whr/:guid/attachments`, async (request, response) => {
     const result = await whr.getWhrAttachments(request.params.guid, request.dbx, request.algorithm);
     // send the response to the browser
     response.json(result);
 });
 
-app.post(`${program.root}/whr/:guid/attachments`, upload.single('attachment'), async (request, response) => {
+app.post(`${options.root}/whr/:guid/attachments`, upload.single('attachment'), async (request, response) => {
     const result = await whr.saveWhrAttachment(request.params.guid, request, request.file);
     // send the response to the browser
     response.json(result);
 });
 
-app.get(`${program.root}/whr/:guid/attachment/:id`, async (request, response) => {
+app.get(`${options.root}/whr/:guid/attachment/:id`, async (request, response) => {
     whr.getWhrAttachment(request.params.guid, parseInt(request.params.id), request.dbx, request.algorithm, response);
 });
 
-app.get(`${program.root}/invoices`, async (request, response) => {
+app.get(`${options.root}/invoices`, async (request, response) => {
     const results = await invoice.getList(request.dbx, request.algorithm, request.query.startDate, request.query.endDate);
     response.json(results);
 });
 
-app.get(`${program.root}/company-info`, async (request, response) => {
+app.get(`${options.root}/company-info`, async (request, response) => {
     response.json(await company.getCompanyInfo(request.dbx));
 });
 
 // get the current background job configuration
-app.get(`${program.root}/config-process`, async (request, response) => {
+app.get(`${options.root}/config-process`, async (request, response) => {
     const config = await configJob.getConfig();
     response.json(config);
 });
 
 // save the background job configuration
-app.post(`${program.root}/config-process`, upload.none(), function (request, response) {
+app.post(`${options.root}/config-process`, upload.none(), function (request, response) {
     const configPath = path.join(__dirname, 'config.json');
 
     configJob.saveConfig(configPath, request.body);
@@ -171,17 +170,17 @@ app.post(`${program.root}/config-process`, upload.none(), function (request, res
 });
 
 // create an endpoint to stop the background process
-app.get(`${program.root}/stop-process`, async function (request, response) {
+app.get(`${options.root}/stop-process`, async function (request, response) {
     childProcess.kill();
     response.json({success: true});
 });
 
 // test FTP connection
-app.get(`${program.root}/test-ftp`, async function (request, response) {
+app.get(`${options.root}/test-ftp`, async function (request, response) {
     ftp.testConnection(response);
 });
 
 // start your application in the port specified
-app.listen(program.port, () => {
-    console.log(`Server started on port ${program.port}...`);
+app.listen(options.port, () => {
+    console.log(`Server started on port ${options.port}...`);
 });
