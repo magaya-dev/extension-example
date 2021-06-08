@@ -1,1 +1,4 @@
 node_modules/
+extensions-data/
+.vscode/launch.json
+extension.config.json
