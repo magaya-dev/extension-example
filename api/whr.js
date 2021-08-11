@@ -155,12 +155,12 @@ module.exports = {
             };
         }
 
-        // mark the Warehouse Receipt for edition
-        let editWhr = await dbw.edit(whr);
-        // set the value of the Custom Field
-        editWhr.CustomFields['test_from_api'] = data.customField;
-
         try {
+            // mark the Warehouse Receipt for edition
+            let editWhr = dbx.edit(whr);
+            // set the value of the Custom Field
+            editWhr.CustomFields['test_from_api'] = data.customField;
+            
             // save the modified Warehouse Receipt to the database
             await dbw.save(editWhr);
 
