@@ -43,7 +43,8 @@ program.version(packageJson.version)
     .option('-s, --service-name <value>', 'name for service')
     .option('-g, --gateway', 'dictates if we should be through gateway')
     .option('-i, --network-id <n>', 'magaya network id', parseInt)
-    .option('--connection-string <value>', 'connection endpoint for database')
+    .option('-c, --connection-string <cs>', 'connection endpoint for database')
+    .option('--no-daemon', 'pm2 no daemon option')
     .parse(process.argv);
 
 const options = program.opts();
