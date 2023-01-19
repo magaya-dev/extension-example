@@ -3,7 +3,7 @@ async function customFieldDefinitionExists(hyperion, internalName, objectType) {
 
     return definitionsList && await hyperion.algorithm.find(hyperion.dbx.using(definitionsList))
         .where(function (obj) {
-            return obj.InternalName === internalName;
+            return obj.InternalName.toLowerCase() === internalName.toLowerCase();
         });
 }
 
