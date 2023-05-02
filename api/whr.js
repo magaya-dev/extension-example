@@ -14,10 +14,13 @@ function transformWhr(whr) {
 
 module.exports = {
     getWhrItemCount : async (whrGuid, dbx, algorithm) => {
+        if (!whrGuid)
+            return 0;
+        
         const list = dbx.Warehousing.WarehouseReceipt.ListByGuid;
 
         // find the desired item asynchronously
-        const found = await algorithm.find(dbx.using(list))
+        const found = await algorithm.find(dbx.using(list).from(whrGuid).to(whrGuid))
             .where(function (whr) {
                 return whr.GUID === whrGuid;
             });
@@ -33,7 +36,7 @@ module.exports = {
         const list = dbx.Warehousing.WarehouseReceipt.ListByGuid;
 
         // find the desired item asynchronously
-        const found = await algorithm.find(dbx.using(list))
+        const found = await algorithm.find(dbx.using(list).from(whrGuid).to(whrGuid))
             .where(function (whr) {
                 return whr.GUID === whrGuid;
             });
@@ -87,7 +90,7 @@ module.exports = {
 
         const whrList = dbx.Warehousing.WarehouseReceipt.ListByGuid;
 
-        const whr = await algorithm.find(dbx.using(whrList).from(whrGuid)).where(i => {
+        const whr = await algorithm.find(dbx.using(whrList).from(whrGuid).to(whrGuid)).where(i => {
             return true;
         });
 
