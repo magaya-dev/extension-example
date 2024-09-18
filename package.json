@@ -12,7 +12,7 @@
   "dependencies": {
     "@magaya/extension-fs-helper": "0.1.0",
     "commander": "^8.3.0",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "ftp": "^0.3.10",
     "moment": "^2.29.4",
     "multer": "^1.4.5-lts.1"
